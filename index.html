@@ -1,0 +1,282 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Anurudh AI Chatbot</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #0b1020;
+    color: white;
+    height: 100vh;
+    display: flex;
+}
+
+.sidebar {
+    width: 250px;
+    background: #111827;
+    padding: 20px;
+    border-right: 1px solid #263247;
+}
+
+.logo {
+    font-size: 25px;
+    font-weight: bold;
+    color: #8b5cf6;
+    margin-bottom: 30px;
+}
+
+.new-chat {
+    width: 100%;
+    padding: 13px;
+    background: #7c3aed;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 15px;
+}
+
+.main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+header {
+    padding: 20px;
+    border-bottom: 1px solid #263247;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.chat {
+    flex: 1;
+    padding: 25px;
+    overflow-y: auto;
+}
+
+.message {
+    max-width: 750px;
+    margin: 15px auto;
+    padding: 15px;
+    border-radius: 12px;
+    line-height: 1.6;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
+.user {
+    background: #49318a;
+    margin-left: auto;
+}
+
+.bot {
+    background: #1e293b;
+    margin-right: auto;
+}
+
+.welcome {
+    text-align: center;
+    margin-top: 100px;
+}
+
+.welcome h1 {
+    font-size: 35px;
+    color: #a78bfa;
+    margin-bottom: 12px;
+}
+
+.welcome p {
+    color: #aab4c8;
+}
+
+.input-area {
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    border-top: 1px solid #263247;
+}
+
+.input-area input {
+    width: 75%;
+    max-width: 700px;
+    padding: 16px;
+    border-radius: 12px;
+    border: 1px solid #374151;
+    background: #1e293b;
+    color: white;
+    outline: none;
+    font-size: 16px;
+}
+
+.input-area button {
+    padding: 15px 22px;
+    background: #7c3aed;
+    border: none;
+    color: white;
+    border-radius: 12px;
+    cursor: pointer;
+}
+
+.input-area button:hover,
+.new-chat:hover {
+    background: #6d28d9;
+}
+
+@media(max-width:650px) {
+    .sidebar {
+        display: none;
+    }
+
+    .chat {
+        padding: 12px;
+    }
+
+    .welcome h1 {
+        font-size: 27px;
+    }
+
+    .input-area {
+        padding: 12px;
+    }
+
+    .input-area input {
+        width: 100%;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<aside class="sidebar">
+    <div class="logo">✦ Anurudh AI</div>
+    <button class="new-chat" onclick="newChat()">+ New Chat</button>
+</aside>
+
+<div class="main">
+
+<header>✦ Anurudh AI Assistant</header>
+
+<div class="chat" id="chat">
+
+    <div class="welcome" id="welcome">
+        <h1>Hello, Anurudh! 👋</h1>
+        <p>Main Anurudh AI hoon. Mujhse kuch bhi poochho!</p>
+    </div>
+
+</div>
+
+<div class="input-area">
+    <input
+        type="text"
+        id="userInput"
+        placeholder="Ask me anything..."
+        onkeydown="if(event.key==='Enter') sendMessage()"
+    >
+    <button onclick="sendMessage()">Send ➤</button>
+</div>
+
+</div>
+
+<script>
+
+const chat = document.getElementById("chat");
+const input = document.getElementById("userInput");
+
+function addMessage(text, sender) {
+    const msg = document.createElement("div");
+    msg.className = "message " + sender;
+    msg.textContent = text;
+    chat.appendChild(msg);
+    chat.scrollTop = chat.scrollHeight;
+}
+
+function sendMessage() {
+
+    let text = input.value.trim();
+
+    if (text === "") return;
+
+    const welcome = document.getElementById("welcome");
+    if (welcome) welcome.remove();
+
+    addMessage(text, "user");
+    input.value = "";
+
+    const typing = document.createElement("div");
+    typing.className = "message bot";
+    typing.textContent = "Anurudh AI is typing...";
+    chat.appendChild(typing);
+
+    setTimeout(() => {
+
+        typing.remove();
+
+        let answer = getAnswer(text);
+
+        addMessage(answer, "bot");
+
+    }, 800);
+}
+
+function getAnswer(text) {
+
+    let msg = text.toLowerCase();
+
+    if (msg.includes("hello") || msg.includes("hi") || msg.includes("namaste")) {
+        return "Hello Anurudh Singh! 👋 Welcome to Anurudh AI. Main tumhari kya help kar sakta hoon?";
+    }
+
+    if (msg.includes("your name") || msg.includes("naam")) {
+        return "Mera naam Anurudh AI hai! 🤖";
+    }
+
+    if (msg.includes("who are you") || msg.includes("kaun ho")) {
+        return "Main Anurudh AI Chatbot hoon, jise Anurudh Singh ne banaya hai!";
+    }
+
+    if (msg.includes("time") || msg.includes("samay")) {
+        return "Abhi ka time hai: " + new Date().toLocaleTimeString();
+    }
+
+    if (msg.includes("date") || msg.includes("tarikh")) {
+        return "Aaj ki date hai: " + new Date().toLocaleDateString();
+    }
+
+    if (msg.includes("creator") || msg.includes("owner")) {
+        return "Mujhe Anurudh Singh ne create kiya hai! ❤️";
+    }
+
+    if (msg.includes("help")) {
+        return "Main tumhari basic questions mein help kar sakta hoon. Mujhse time, date, naam aur greetings ke baare mein poochho.";
+    }
+
+    return "Interesting question, Anurudh! 😊 Abhi main ek basic demo chatbot hoon. Mujhe real AI banane ke liye AI API connect karni hogi.";
+}
+
+function newChat() {
+    chat.innerHTML = `
+        <div class="welcome" id="welcome">
+            <h1>Hello, Anurudh! 👋</h1>
+            <p>Main Anurudh AI hoon. Mujhse kuch bhi poochho!</p>
+        </div>
+    `;
+}
+
+</script>
+
+</body>
+</html>
